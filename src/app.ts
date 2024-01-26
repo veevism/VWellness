@@ -2,6 +2,9 @@ import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 import expressWinston from "express-winston";
 import winston from "winston";
+import helmet from 'helmet';
+
+import workoutRoute from "./api/route/WorkoutRoute";
 
 import logger from "./config/logger";
 
@@ -15,10 +18,11 @@ class App {
   }
 
   private setMiddlewares(): void {
+    this.app.use(helmet())
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
     const logFormat = winston.format.printf(
-      ({ level, message, timestamp, meta }) => {
+      ({ level, message, timestamp, meta }) : string => {
         return `${timestamp} [${level}] ${message} ${
           meta ? JSON.stringify(meta) : ""
         }`;
@@ -32,15 +36,14 @@ class App {
         expressFormat: false,
         colorize: false,
         statusLevels: true,
-        meta: false, // ไม่ต้องแสดง meta แบบมากเหมือนเดิม
+        meta: false,
       })
     );
+    // this.app.use('/api/v1/workout', workoutRoute)
   }
 
   private setRoutes(): void {
-    this.app.get("/", (req: Request, res: Response) => {
-      res.send("Hello World!");
-    });
+      this.app.use('/api/v1/workout', workoutRoute)
   }
 }
 
