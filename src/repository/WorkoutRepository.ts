@@ -1,6 +1,8 @@
 import { Workout, IWorkout } from '../model/Workout';
 import { IWorkoutRepository } from './IWorkoutRepository';
+import {injectable} from "inversify";
 
+@injectable()
 export class WorkoutRepository implements IWorkoutRepository {
     async create(workoutData: IWorkout): Promise<IWorkout> {
         const newWorkout = new Workout(workoutData);
@@ -11,7 +13,6 @@ export class WorkoutRepository implements IWorkoutRepository {
     async findById(workoutId: string): Promise<IWorkout | null> {
         return Workout.findById(workoutId);
     }
-
     async findAllByUserId(userId: string): Promise<IWorkout[]> {
         return Workout.find({ userId: userId });
     }

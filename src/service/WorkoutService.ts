@@ -1,11 +1,15 @@
 import { IWorkout } from '../model/Workout';
 import { IWorkoutRepository } from '../repository/IWorkoutRepository';
 import { IWorkoutService } from './IWorkoutService';
+import { injectable, inject } from "inversify";
+import { TYPES } from "../util/type";
 
+
+@injectable()
 export class WorkoutService implements IWorkoutService {
     private workoutRepository: IWorkoutRepository;
 
-    constructor(workoutRepository: IWorkoutRepository) {
+    constructor(@inject(TYPES.WorkoutRepository) workoutRepository: IWorkoutRepository) {
         this.workoutRepository = workoutRepository;
     }
 

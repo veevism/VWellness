@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import { IWorkoutService } from '../../service/IWorkoutService';
 import { IWorkout } from '../../model/Workout';
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../util/type";
 
+@injectable()
 export class WorkoutController {
     private workoutService: IWorkoutService;
 
-    constructor(workoutService: IWorkoutService) {
+    constructor(@inject(TYPES.WorkoutRepository) workoutService: IWorkoutService) {
         this.workoutService = workoutService;
     }
 

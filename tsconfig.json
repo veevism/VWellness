@@ -10,7 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist",
     "declaration": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true,    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
 
 }

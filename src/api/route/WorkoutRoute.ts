@@ -1,16 +1,13 @@
+import "reflect-metadata";
+import { TYPES } from "../../util/type";
+import { myContainer } from "../../config/investify";
 import {WorkoutController} from "../controller/WorkOutController";
-import {WorkoutService} from "../../service/WorkoutService";
-import {WorkoutRepository} from "../../repository/WorkoutRepository";
-import {IWorkoutRepository} from "../../repository/IWorkoutRepository";
-
 const express = require("express")
 const router = express.Router()
 
 // Create object from concrete class (# Dependencies Injection)
-const workoutRepository: IWorkoutRepository = new WorkoutRepository();
-const workoutService : WorkoutService = new WorkoutService(workoutRepository);
-const workoutController: WorkoutController = new WorkoutController(workoutService);
+const workoutController: WorkoutController = myContainer.get<WorkoutController>(TYPES.WorkoutController)
 
-router.route('/').get(workoutController.createWorkout)
+router.route('/').get(workoutController.createWorkout.bind(workoutController))
 
 export default router;
