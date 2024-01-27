@@ -1,6 +1,15 @@
+import 'dotenv/config';
+import connectDB from "./config/connectDB";
 import app from "./app";
-const PORT = process.env.PORT || 3000;
+import { MONGODB_URI, PORT } from './util/var';
 
-app.listen(PORT, (): void => {
-  console.log(`Server is running on port ${PORT}`);
-});
+connectDB(MONGODB_URI)
+    .then(() => {
+      app.listen(PORT, (): void => {
+        console.log(`Server is running on port ${PORT}`);
+      });
+    })
+    .catch((error) => {
+      console.error("Database connection failed:", error);
+      process.exit(1);
+    });

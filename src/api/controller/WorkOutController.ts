@@ -8,7 +8,7 @@ import { TYPES } from "../../util/type";
 export class WorkoutController {
     private workoutService: IWorkoutService;
 
-    constructor(@inject(TYPES.WorkoutRepository) workoutService: IWorkoutService) {
+    constructor(@inject(TYPES.WorkoutService) workoutService: IWorkoutService) {
         this.workoutService = workoutService;
     }
 
