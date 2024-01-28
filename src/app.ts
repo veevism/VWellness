@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
+import rateLimit, {RateLimitRequestHandler} from 'express-rate-limit';
 import bodyParser from "body-parser";
 import expressWinston from "express-winston";
 import winston from "winston";
@@ -28,6 +29,11 @@ class App {
         }`;
       }
     );
+      const limiter : RateLimitRequestHandler = rateLimit({
+          windowMs: 2 * 60 * 1000,
+          limit: 100,
+          message: "Too many requests from this IP, please try again after 2 minutes"
+      });
     this.app.use(
       expressWinston.logger({
         winstonInstance: logger,
