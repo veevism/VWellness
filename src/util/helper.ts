@@ -12,3 +12,22 @@ export function createErrorResponse(message: string) {
         msg: message,
     };
 }
+
+export class GeneralError extends Error {
+
+    public status : number
+    constructor(status : number, message : string) {
+        super(message);
+        this.status = status;
+    }
+}
+
+export class InternalError extends Error {
+
+    public status : number
+    constructor(message : string) {
+        super('Internal Server Error');
+        this.status = 500;
+    }
+}
+
