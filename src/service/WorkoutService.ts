@@ -39,6 +39,12 @@ export class WorkoutService implements IWorkoutService {
 
     }
 
+    async getAllWorkouts(): Promise<{ workouts: WorkoutResponseFormat[] }> {
+        const workouts : IWorkout[] = await this.workoutRepository.findAll();
+        return { workouts: workouts };
+
+    }
+
     async updateWorkout(workoutId: string, workoutData: IWorkout): Promise<IWorkout> {
         return this.workoutRepository.update(workoutId, workoutData);
     }

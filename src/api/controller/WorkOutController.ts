@@ -30,12 +30,27 @@ export class WorkoutController {
         }
     }
 
-    public getAllWorkout = async (req: Request, res: Response): Promise<Response> => {
+    public getAllWorkoutsByUserId = async (req: Request, res: Response): Promise<Response> => {
         try {
-            const workoutId : string = req.params.id;
+            const workoutId : string = req.params.userId;
+            console.log(workoutId)
             const allWorkout : WorkoutArrayResponse = await this.workoutService.getAllWorkoutsByUserId(workoutId);
-            if (!allWorkout) {
+
+            console.log(allWorkout.workouts.length)
+            if (allWorkout.workouts.length == 0) {
                 return res.status(404).json(createErrorResponse("Can not find any workout"));
+            }
+            return res.status(200).json(createSuccessResponse(allWorkout, 'Find all workout successfully'));
+        } catch (error) {
+            return res.status(400).json({ message: error.message });
+        }
+    }
+
+    public getAllWorkouts = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const allWorkout : WorkoutArrayResponse = await this.workoutService.getAllWorkouts();
+            if (!allWorkout.workouts ) {
+                return res.status(404).json(createErrorResponse("Workout not found"));
             }
             return res.status(200).json(createSuccessResponse(allWorkout, 'Find all workout successfully'));
         } catch (error) {

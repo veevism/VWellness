@@ -3,6 +3,7 @@ import connectDB from "./config/connectDB";
 import app from "./app";
 import { MONGODB_URI, PORT } from './util/var';
 
+
 connectDB(MONGODB_URI)
     .then(() => {
       app.listen(PORT, (): void => {

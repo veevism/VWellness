@@ -6,4 +6,5 @@ export interface IWorkoutRepository {
     findAllByUserId(userId: string): Promise<IWorkout[]>;
     update(workoutId: string, workoutData: IWorkout): Promise<IWorkout>;
     delete(workoutId: string): Promise<void>;
+    findAll(): Promise<IWorkout[]>
 }

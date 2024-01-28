@@ -1,4 +1,6 @@
 import mongoose, { Document } from "mongoose";
+import { v4 as uuidv4 } from 'uuid';
+
 
 enum UserStatus {
     Active = "Active",
@@ -16,6 +18,7 @@ interface IImageCollectionOccupied {
 }
 
 interface IUser extends Document {
+    userId: string,
     email: Email;
     password: string;
     name: string;
@@ -26,6 +29,7 @@ interface IUser extends Document {
     status: UserStatus;
 }
 const UserSchema = new mongoose.Schema({
+    userId: { type: String, default: uuidv4, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     name: { type: String, required: true },
