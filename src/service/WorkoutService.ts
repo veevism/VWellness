@@ -3,7 +3,7 @@ import { IWorkoutRepository } from '../repository/IWorkoutRepository';
 import { IWorkoutService } from './IWorkoutService';
 import { injectable, inject } from "inversify";
 import { TYPES } from "../api/type/type";
-import {WorkoutResponseFormat, WorkoutResponse} from "../api/type/workoutType";
+import {WorkoutResponseFormat, WorkoutResponse, WorkoutArrayResponse} from "../api/type/workoutType";
 
 
 @injectable()
@@ -14,34 +14,59 @@ export class WorkoutService implements IWorkoutService {
         this.workoutRepository = workoutRepository;
     }
 
-   public async createWorkout(workoutData: IWorkout):Promise<{ workout: WorkoutResponseFormat }> {
+   public async createWorkout(workoutData: IWorkout):Promise<WorkoutResponse> {
         try {
             const newWorkout : IWorkout  = await Workout.create(workoutData);
-            const workoutFormat: WorkoutResponseFormat = {
+            const workoutResponse: WorkoutResponseFormat = {
                 type: newWorkout.type,
                 duration: newWorkout.duration,
                 caloriesBurned: newWorkout.caloriesBurned,
-                date: newWorkout.date
+                date: newWorkout.date,
+                heartRateAvg: newWorkout.heartRateAvg
             };
-            return { workout: workoutFormat };
+            return { workout: workoutResponse };
         } catch (error) {
             throw error;
         }
     }
 
-    async getWorkoutById(workoutId: string): Promise<IWorkout | null> {
-        return this.workoutRepository.findById(workoutId);
+    async getWorkoutById(workoutId: string): Promise<WorkoutResponse | null> {
+        const workout : IWorkout = await this.workoutRepository.findById(workoutId);
+        const workoutResponse : WorkoutResponseFormat = {
+            type: workout.type,
+            duration: workout.duration,
+            caloriesBurned: workout.caloriesBurned,
+            date: workout.date,
+            heartRateAvg: workout.heartRateAvg
+        }
+
+        return { workout: workoutResponse };
     }
 
-    async getAllWorkoutsByUserId(userId: string): Promise<{ workouts: WorkoutResponseFormat[] }> {
+    async getAllWorkoutsByUserId(userId: string): Promise<WorkoutArrayResponse> {
         const workouts : IWorkout[] = await this.workoutRepository.findAllByUserId(userId);
-        return { workouts: workouts };
+        const workoutsResponse : WorkoutResponseFormat[] = workouts.map(workout => ({
+            type: workout.type,
+            duration: workout.duration,
+            caloriesBurned: workout.caloriesBurned,
+            date: workout.date,
+            heartRateAvg: workout.heartRateAvg
+        }));
+        return { workouts: workoutsResponse };
 
     }
 
-    async getAllWorkouts(): Promise<{ workouts: WorkoutResponseFormat[] }> {
+    async getAllWorkouts(): Promise<WorkoutArrayResponse> {
         const workouts : IWorkout[] = await this.workoutRepository.findAll();
-        return { workouts: workouts };
+        const workoutsResponse : WorkoutResponseFormat[] = workouts.map(workout => ({
+            type: workout.type,
+            duration: workout.duration,
+            caloriesBurned: workout.caloriesBurned,
+            date: workout.date,
+            heartRateAvg: workout.heartRateAvg
+        }));
+
+        return { workouts: workoutsResponse };
 
     }
 

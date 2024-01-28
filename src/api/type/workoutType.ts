@@ -7,7 +7,7 @@ export enum WorkoutType {
     Walking = "Walking",
 }
 
-export type WorkoutResponseFormat = Pick<IWorkout, 'type' | 'duration' | 'caloriesBurned' | 'date'>;
+export type WorkoutResponseFormat = Pick<IWorkout, 'type' | 'duration' | 'caloriesBurned' | 'date' | 'heartRateAvg'>;
 
 export interface WorkoutResponse {
     workout: WorkoutResponseFormat;

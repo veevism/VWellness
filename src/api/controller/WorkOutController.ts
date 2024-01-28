@@ -36,26 +36,26 @@ export class WorkoutController {
     public getAllWorkoutsByUserId = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
         try {
             const workoutId : string = req.params.userId;
-            const allWorkout : WorkoutArrayResponse = await this.workoutService.getAllWorkoutsByUserId(workoutId);
-            if (allWorkout.workouts.length == 0) {
+            const workoutArrayResponse : WorkoutArrayResponse = await this.workoutService.getAllWorkoutsByUserId(workoutId);
+            if (!workoutArrayResponse.workouts.length ) {
                 throw new GeneralError(404,"Workout not found")
             }
 
-            return res.status(200).json(createSuccessResponse(allWorkout, 'Find all workout successfully'));
+            return res.status(200).json(createSuccessResponse(workoutArrayResponse, 'Find all workout successfully'));
         } catch (error) {
             next(error)
         }
     }
 
-    public getAllWorkouts = async (req: Request, res: Response): Promise<Response> => {
+    public getAllWorkouts = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
         try {
-            const allWorkout : WorkoutArrayResponse = await this.workoutService.getAllWorkouts();
-            if (!allWorkout.workouts ) {
-                return res.status(404).json(createErrorResponse("Workout not found"));
+            const workoutArrayResponse : WorkoutArrayResponse = await this.workoutService.getAllWorkouts();
+            if (!workoutArrayResponse.workouts.length ) {
+                throw new GeneralError(404,"Workout not found")
             }
-            return res.status(200).json(createSuccessResponse(allWorkout, 'Find all workout successfully'));
+            return res.status(200).json(createSuccessResponse(workoutArrayResponse, 'Find all workout successfully'));
         } catch (error) {
-            return res.status(400).json({ message: error.message });
+            next(error)
         }
     }
 
