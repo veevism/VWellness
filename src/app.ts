@@ -4,12 +4,17 @@ import bodyParser from "body-parser";
 import expressWinston from "express-winston";
 import winston from "winston";
 import helmet from 'helmet';
+import cors from "cors";
 
 import workoutRoute from "./api/route/WorkoutRoute";
 
 import logger from "./config/logger";
+
 import {errorHandling} from "./api/middleware/errorHandling";
 import {routeNotFound} from "./api/middleware/routeNotFound";
+import {credentials} from "./api/middleware/credential";
+import corsOptions from "./config/corsOptions";
+
 
 class App {
   public app: express.Application;
@@ -49,11 +54,13 @@ class App {
       })
     );
 
+
     this.app.use(
     limiter
     )
 
-
+    this.app.use(credentials)
+    this.app.use(cors(corsOptions))
     // this.app.use('/api/v1/workout', workoutRoute)
   }
 
