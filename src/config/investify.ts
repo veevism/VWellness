@@ -1,5 +1,5 @@
 import { Container } from "inversify";
-import { TYPES } from "../util/type";
+import { TYPES } from "../api/type/type";
 import { IWorkoutRepository } from "../repository/IWorkoutRepository";
 import { WorkoutRepository } from "../repository/WorkoutRepository";
 import { IWorkoutService } from "../service/IWorkoutService";

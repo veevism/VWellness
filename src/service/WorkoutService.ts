@@ -2,7 +2,7 @@ import { IWorkout } from '../model/Workout';
 import { IWorkoutRepository } from '../repository/IWorkoutRepository';
 import { IWorkoutService } from './IWorkoutService';
 import { injectable, inject } from "inversify";
-import { TYPES } from "../util/type";
+import { TYPES } from "../api/type/type";
 
 
 @injectable()
@@ -14,6 +14,7 @@ export class WorkoutService implements IWorkoutService {
     }
 
     async createWorkout(workoutData: IWorkout): Promise<IWorkout> {
+        console.log(workoutData)
         return this.workoutRepository.create(workoutData);
     }
 
