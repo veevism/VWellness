@@ -8,6 +8,8 @@ const router = express.Router()
 // Create object from concrete class (# Dependencies Injection)
 const workoutController: WorkoutController = myContainer.get<WorkoutController>(TYPES.WorkoutController)
 
+
 router.route('/').post(workoutController.createWorkout.bind(workoutController))
+router.route('/').get(workoutController.getAllWorkout.bind(workoutController))
 
 export default router;

@@ -8,6 +8,7 @@ import helmet from 'helmet';
 import workoutRoute from "./api/route/WorkoutRoute";
 
 import logger from "./config/logger";
+import {createUser} from "./populate";
 
 class App {
   public app: express.Application;

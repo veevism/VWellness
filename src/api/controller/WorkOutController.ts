@@ -4,9 +4,11 @@ import { IWorkout } from '../../model/Workout';
 import { inject, injectable } from "inversify";
 import { TYPES } from "../type/type";
 import {ErrorResponse, SuccessResponse} from "../../model/ApiResponse";
+import {createErrorResponse, createSuccessResponse} from "../../util/helper";
+import {WorkoutResponseFormat, WorkoutResponse, WorkoutArrayResponse} from "../type/workoutType";
 
 
-type WorkoutResponse = Pick<IWorkout, 'type' | 'duration' | 'caloriesBurned' | 'date'>;
+// type WorkoutResponse = Pick<IWorkout, 'type' | 'duration' | 'caloriesBurned' | 'date'>;
 
 @injectable()
 export class WorkoutController {
@@ -20,37 +22,22 @@ export class WorkoutController {
     public createWorkout = async (req: Request, res: Response): Promise<Response> => {
         try {
             const workoutData: IWorkout = req.body;
-            const newWorkout: IWorkout = await this.workoutService.createWorkout(workoutData);
-            const workoutResponse: WorkoutResponse = {
-                type: newWorkout.type,
-                duration: newWorkout.duration,
-                caloriesBurned: newWorkout.caloriesBurned,
-                date: newWorkout.date
-            };
+            const newWorkout: WorkoutResponse = await this.workoutService.createWorkout(workoutData);
 
-            const response: SuccessResponse<WorkoutResponse> = {
-                success: true,
-                data: workoutResponse,
-                msg: 'Workout created successfully'
-            };
-            return res.status(201).json(response);
+            return res.status(201).json(createSuccessResponse(newWorkout, 'Workout created successfully'));
         } catch (error) {
-            const errorResponse: ErrorResponse = {
-                success: false,
-                msg: error.message
-            };
-            return res.status(400).json(errorResponse);
+            return res.status(400).json(createErrorResponse(error.message));
         }
     }
 
-    public getWorkoutById = async (req: Request, res: Response): Promise<Response> => {
+    public getAllWorkout = async (req: Request, res: Response): Promise<Response> => {
         try {
             const workoutId : string = req.params.id;
-            const workout : IWorkout = await this.workoutService.getWorkoutById(workoutId);
-            if (!workout) {
-                return res.status(404).json({ message: 'Workout not found' });
+            const allWorkout : WorkoutArrayResponse = await this.workoutService.getAllWorkoutsByUserId(workoutId);
+            if (!allWorkout) {
+                return res.status(404).json(createErrorResponse("Can not find any workout"));
             }
-            return res.json(workout);
+            return res.status(200).json(createSuccessResponse(allWorkout, 'Find all workout successfully'));
         } catch (error) {
             return res.status(400).json({ message: error.message });
         }
