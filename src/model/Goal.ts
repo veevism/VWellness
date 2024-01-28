@@ -1,5 +1,5 @@
 import mongoose, { Document } from 'mongoose';
-import { WorkoutType } from "../util/workoutType";
+import { WorkoutType } from "../api/type/workoutType";
 
 type Note = String
 type Target = Number
