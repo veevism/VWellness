@@ -5,5 +5,5 @@ export const ACCESS_TOKEN_SECRET: string =
 export const REFRESH_TOKEN_SECRET: string =
     process.env.REFRESH_TOKEN_SECRET || "";
 export const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mydb';
-export const PORT = process.env.PORT || 8080;
+export const PORT = process.env.PORT || 3000;
 
