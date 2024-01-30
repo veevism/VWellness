@@ -14,11 +14,18 @@ export function createErrorResponse(message: string) {
 }
 
 export class GeneralError extends Error {
+    public status: number;
 
-    public status : number
-    constructor(status : number, message : string) {
-        super(message);
-        this.status = status;
+    constructor(message: string, status?: number);
+    constructor(status: number, message?: string);
+    constructor(a: string | number, b?: string | number) {
+        super(typeof a === 'string' ? a : b as string);
+
+        if (typeof a === 'number') {
+            this.status = a;
+        } else {
+            this.status = b as number;
+        }
     }
 }
 

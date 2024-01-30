@@ -2,7 +2,7 @@ import mongoose, { Document } from "mongoose";
 import { v4 as uuidv4 } from 'uuid';
 
 
-enum UserStatus {
+export enum UserStatus {
     Active = "Active",
     Inactive = "Inactive",
 }
