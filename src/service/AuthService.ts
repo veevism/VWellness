@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt, {JwtPayload, VerifyErrors} from "jsonwebtoken";
 import {Request} from "express";
 import {AuthResponse, jwtDecoded, userDataFormat} from "../api/type/authType";
+import {UserResponse} from "../api/type/userType";
 
 
 @injectable()
@@ -39,13 +40,13 @@ export class AuthService {
             const access_token = jwt.sign(
                 userData,
                 process.env.ACCESS_TOKEN_SECRET as string,
-                {expiresIn: "30s"}
+                {expiresIn: "1d"}
             );
 
             const refresh_token = jwt.sign(
                 userData,
                 process.env.REFRESH_TOKEN_SECRET as string,
-                {expiresIn: "1d"}
+                {expiresIn: "5d"}
             );
 
             foundUser.refreshToken = refresh_token;
@@ -64,7 +65,7 @@ export class AuthService {
 
     }
 
-    public async registerAuth(email: string, password: string, name: string): Promise<IUser> {
+    public async registerAuth(email: string, password: string, name: string): Promise<UserResponse> {
 
         try {
             const EMAIL_REGEX: RegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -89,7 +90,16 @@ export class AuthService {
                 password: hashedPassword,
                 name: name,
             };
-            return await User.create(newUser)
+
+            const user : IUser = await User.create(newUser)
+
+            const userResponse: UserResponse = {
+                email: user.email,
+                name: user.name,
+                points: user.points
+            };
+
+            return userResponse
         } catch (error) {
             throw error;
         }
@@ -127,12 +137,12 @@ export class AuthService {
             const access_token = jwt.sign(
                 userData,
                 process.env.ACCESS_TOKEN_SECRET as string,
-                {expiresIn: "30s"}
+                {expiresIn: "1d"}
             );
             const new_refresh_token = jwt.sign(
                 userData,
                 process.env.REFRESH_TOKEN_SECRET as string,
-                {expiresIn: "1d"}
+                {expiresIn: "5d"}
             );
             foundUser.refreshToken = new_refresh_token;
             await foundUser.save();
@@ -147,5 +157,22 @@ export class AuthService {
             throw (error)
         }
 
+    }
+
+    public async getUserProfile(userId: string): Promise<UserResponse> {
+        try {
+            const foundUser = await User.findOne({userId}).exec();
+            if (!foundUser) {
+                throw new GeneralError(`User not found`, 404);
+            }
+
+            return {
+                email: foundUser.email,
+                name: foundUser.name,
+                points: foundUser.points
+            };
+        } catch (error) {
+            throw error;
+        }
     }
 }

@@ -10,6 +10,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {AuthService} from "../../service/AuthService";
 import {authRequest, AuthResponse} from "../type/authType";
+import {UserResponse} from "../type/userType";
 
 
 export class AuthController {
@@ -37,11 +38,11 @@ export class AuthController {
     public registerAuth = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
         const { email, password, name } = req.body;
         try {
-            const registerUser : IUser = await this.authService.registerAuth(email, password, name)
-            if (!registerUser) {
+            const user : UserResponse = await this.authService.registerAuth(email, password, name)
+            if (!user) {
                 throw new GeneralError(400,"Can't Create User")
             }
-            return res.status(200).json(createSuccessResponse(registerUser, 'Register Successfully'));
+            return res.status(200).json(createSuccessResponse( {user : user} , 'Register Successfully'));
         } catch (error) {
             next (error)
         }
@@ -68,9 +69,18 @@ export class AuthController {
     }
 
 
-    // public logoutAuth = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-    //
-    //
-    // }
-    //
+    public getMe = async (req: authRequest, res: Response, next: NextFunction): Promise<Response> => {
+        try {
+            // Assuming your authentication middleware sets userId on the request
+            const {userId} = req;
+            if (!userId) {
+                throw new GeneralError(401, "Unauthorized");
+            }
+
+            const userProfile: UserResponse = await this.authService.getUserProfile(userId);
+            return res.status(200).json(createSuccessResponse(userProfile, 'User profile fetched successfully'));
+        } catch (error) {
+            next(error);
+        }
+    };
 }

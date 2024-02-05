@@ -5,16 +5,18 @@ import {WorkoutController} from "../controller/WorkOutController";
 import {AuthController} from "../controller/AuthController";
 import {AuthService} from "../../service/AuthService";
 import {verifyRefreshToken} from "../middleware/verifyRefreshToken";
+import {GoalService} from "../../service/GoalService";
+import {GoalController} from "../controller/GoalController";
 const express = require("express")
 const router = express.Router()
 
 // Create object from concrete class (# Dependencies Injection)
-const authService : AuthService = new AuthService()
-const authController: AuthController = new AuthController(authService)
+const goalService : GoalService = new GoalService()
+const goalController: GoalController = new GoalController(goalService)
 
 
 
-router.route('/login').post(authController.loginAuth)
-router.route('/register').post(authController.registerAuth)
-router.route('/refresh').get(verifyRefreshToken, authController.refreshAuth)
+router.route('/').post(goalController.createGoal)
+router.route('/').get(goalController.getGoal)
+// router.route('/refresh').get(verifyRefreshToken, goalController.refreshAuth)
 export default router;

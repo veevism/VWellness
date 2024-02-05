@@ -9,8 +9,6 @@ export function verifyRefreshToken(req : authRequest, res: Response, next: NextF
     if (typeof authHeader === "string" && authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
 
-        console.log(token)
-
         jwt.verify(
             token,
             process.env.REFRESH_TOKEN_SECRET as string,
@@ -19,9 +17,9 @@ export function verifyRefreshToken(req : authRequest, res: Response, next: NextF
                     next(new GeneralError("credential invalids", 403));
                 }
                 const userInfo : IUser = decoded as IUser;
-                console.log(userInfo)
                 req.email = userInfo.email;
                 req.refresh_token = token
+                req.userId = userInfo.userId
                 console.log("authenticate refresh token successful")
                 next();
             }

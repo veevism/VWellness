@@ -6,6 +6,7 @@ import { TYPES } from "../type/type";
 import {ErrorResponse, SuccessResponse} from "../../model/ApiResponse";
 import {createErrorResponse, createSuccessResponse, GeneralError, InternalError} from "../../util/helper";
 import {WorkoutResponseFormat, WorkoutResponse, WorkoutArrayResponse} from "../type/workoutType";
+import {authRequest} from "../type/authType";
 
 
 // type WorkoutResponse = Pick<IWorkout, 'type' | 'duration' | 'caloriesBurned' | 'date'>;
@@ -19,10 +20,11 @@ export class WorkoutController {
         this.workoutService = workoutService;
     }
 
-    public createWorkout = async (req: Request, res: Response, next : NextFunction): Promise<Response> => {
+    public createWorkout = async (req: authRequest, res: Response, next : NextFunction): Promise<Response> => {
         try {
             const workoutData: IWorkout = req.body;
-            const newWorkout: WorkoutResponse = await this.workoutService.createWorkout(workoutData);
+            const { userId } = req
+            const newWorkout: WorkoutResponse = await this.workoutService.createWorkout(workoutData, userId);
             if (!newWorkout) {
                 throw new GeneralError(409,"Can't create workout")
             }
@@ -33,10 +35,11 @@ export class WorkoutController {
         }
     }
 
-    public getAllWorkoutsByUserId = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+    public getAllWorkoutsByUserId = async (req: authRequest, res: Response, next: NextFunction): Promise<Response> => {
         try {
-            const workoutId : string = req.params.userId;
-            const workoutArrayResponse : WorkoutArrayResponse = await this.workoutService.getAllWorkoutsByUserId(workoutId);
+            const userId : string = req.userId;
+            const workoutArrayResponse : WorkoutArrayResponse = await this.workoutService.getAllWorkoutsByUserId(userId);
+            console.log(workoutArrayResponse)
             if (!workoutArrayResponse.workouts.length ) {
                 throw new GeneralError(404,"Workout not found")
             }

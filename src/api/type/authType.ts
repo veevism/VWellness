@@ -2,8 +2,10 @@ import { Request } from 'express';
 import {IWorkout} from "../../model/Workout";
 
 export interface authRequest extends Request {
+    access_token?: string;
     email?: string;
     refresh_token?: string;
+    userId: string;
 }
 
 

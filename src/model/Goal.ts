@@ -1,11 +1,10 @@
 import mongoose, { Document } from 'mongoose';
 import { WorkoutType } from "../api/type/workoutType";
+import {CaloriesBurned} from "./Workout";
 
 type Note = String
-type Target = Number
-type currentProgress = Number
 
-enum GoalStatus {
+export enum GoalStatus {
     Complete = "Complete",
     Incomplete = "Incomplete",
 }
@@ -16,11 +15,11 @@ interface IProgressLog {
     note: Note;
 }
 
-interface IGoal extends Document {
-    userId: mongoose.Types.ObjectId;
+export interface IGoal extends Document {
+    userId: String;
     type: WorkoutType;
-    target: Target;
-    currentProgress: currentProgress;
+    target: CaloriesBurned;
+    currentProgress: CaloriesBurned;
     startDate: Date;
     dueDate: Date;
     status: GoalStatus;
@@ -34,7 +33,7 @@ const ProgressLogSchema = new mongoose.Schema({
 });
 
 const GoalSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: String, ref: 'User', required: true },
     type: { type: String, enum: Object.values(WorkoutType), required: true },
     target: { type: Number, required: true },
     currentProgress: { type: Number, required: true },

@@ -6,6 +6,7 @@ export enum UserStatus {
     Active = "Active",
     Inactive = "Inactive",
 }
+
 type Email = string;
 type AccessToken = string;
 type RefreshToken = string;

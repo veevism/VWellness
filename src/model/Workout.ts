@@ -2,14 +2,14 @@ import mongoose, { Document } from 'mongoose';
 import { WorkoutType } from "../api/type/workoutType";
 
 
-type Duration = number
-type CaloriesBurned = number
+type Duration = Number
+export type CaloriesBurned = number
 type Distance = number
 type HeartRateAvg = number
 type Note = String
 
 export interface IWorkout extends Document {
-    userId: mongoose.Types.ObjectId;
+    userId: string;
     type: WorkoutType;
     duration: Duration;
     caloriesBurned: CaloriesBurned;
@@ -20,7 +20,7 @@ export interface IWorkout extends Document {
 }
 
 const WorkoutSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+    userId: { type: String, ref: 'User', required: false },
     type: { type: String, enum: Object.values(WorkoutType), required: true },
     duration: { type: Number, required: true },
     caloriesBurned: { type: Number, required: true },

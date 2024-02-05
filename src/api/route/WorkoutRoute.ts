@@ -11,5 +11,5 @@ const workoutController: WorkoutController = myContainer.get<WorkoutController>(
 
 router.route('/').post(workoutController.createWorkout.bind(workoutController)).get(workoutController.getAllWorkouts.bind(workoutController))
 
-router.route('/user/:userId').get(workoutController.getAllWorkoutsByUserId.bind(workoutController))
+router.route('/user').get(workoutController.getAllWorkoutsByUserId.bind(workoutController))
 export default router;

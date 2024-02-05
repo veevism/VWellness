@@ -11,6 +11,8 @@ import logger from "./config/logger";
 import {errorHandling} from "./api/middleware/errorHandling";
 import {routeNotFound} from "./api/middleware/routeNotFound";
 import authRoute from "./api/route/AuthRoute";
+import goalRoute from "./api/route/GoalRoute";
+import {verifyAccessToken} from "./api/middleware/verifyAccessToken";
 
 class App {
   public app: express.Application;
@@ -59,16 +61,21 @@ class App {
   }
 
   private setRoutes(): void {
+
       this.app.use('/api/v1/auth', authRoute)
 
+      this.app.use(
+          verifyAccessToken
+      )
       // verify access token before
       this.app.use('/api/v1/workout', workoutRoute)
 
-
+      this.app.use('/api/v1/achievement', goalRoute)
 
       this.app.use(
           routeNotFound
       )
+
       this.app.use(
           errorHandling
       )
